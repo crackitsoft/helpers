@@ -2,11 +2,15 @@
 
 namespace  crackitsoft\helpers;
 
+use crackitsoft\helpers\traits\Keygen;
+use crackitsoft\helpers\traits\Status;
+use crackitsoft\helpers\behaviors\Delete;
+use crackitsoft\helpers\behaviors\Creator;
 
 class ActiveRecord extends \yii\db\ActiveRecord
 {
-	use \helpers\traits\Keygen;
-	use \helpers\traits\Status;
+	use Keygen;
+	use Status;
 	public $recordStatus;
 	public function behaviors()
 	{
@@ -14,10 +18,9 @@ class ActiveRecord extends \yii\db\ActiveRecord
 			return parent::behaviors();
 		} else {
 			$behaviors = [
-				\helpers\behaviors\Delete::class,
-				\helpers\behaviors\Creator::class,
+				Delete::class,
+				Creator::class,
 			];
-
 			if ($this->hasAttribute('created_at') && $this->hasAttribute('updated_at')) {
 				$behaviors[] = \yii\behaviors\TimestampBehavior::class;
 			}
@@ -29,14 +32,8 @@ class ActiveRecord extends \yii\db\ActiveRecord
 	{
 		if ($this->hasAttribute('status')) {
 			$status = ($this->is_deleted == 1) ? $this->is_deleted : $this->status;
-			$this->recordStatus = self::badge($status);
+			$this->recordStatus = $this->loadStatus($status);
 		}
 		return parent::afterFind();
-	}
-	public function attributeLabels()
-	{
-		return [
-			'recordStatus' => 'Status',
-		];
 	}
 }

@@ -10,7 +10,7 @@ trait Keygen
 {
 	public  function uid($type, $save = false, $codeType = 'cym')
 	{
-		return AutoIncrement::generate($type,$save,$codeType);
+		//return AutoIncrement::generate($type,$save,$codeType);
 
 	}
 	public  function cryptID($numerical = false, $randandomStringLength = 15)

@@ -61,13 +61,13 @@ class ApiController extends \yii\rest\Controller
         $array['errorPayload']['errors'] = $errors;
 
         if ($message) {
-            $array['errorPayload'] = array_merge($array['errorPayload']['errors'], $this->toastResponse(
+            $array['errorPayload'] = array_merge($array['errorPayload']['errors'], $this->alertifyResponse(
                 [
                     'statusCode' => 422,
                     'message' => $message ? $message : 'Some data could not be validated',
                     'theme' => 'danger'
                 ]
-            )['toastPayload']);
+            )['alertifyPayload']);
         }
         return $array;
     }
@@ -97,33 +97,34 @@ class ApiController extends \yii\rest\Controller
                 ]
             ];
             if ($options['message']) {
-                $toastArray = [
+                $alertifyArray = [
                     'statusCode' => $options['statusCode'],
                     'message' => $options['message'],
                     'theme' => 'success',
                 ];
-                if (isset($options['toastOptions'])) {
-                    $toastArray['toastOptions'] = $options['toastOptions'];
+                if (isset($options['alertifyOptions'])) {
+                    $alertifyArray['alertifyOptions'] = $options['alertifyOptions'];
                 }
 
 
-                $array = array_merge($array, $this->toastResponse($toastArray));
+                $array = array_merge($array, $this->alertifyResponse($alertifyArray));
             }
             //$array['dataPayload'] = $model;
         }
         return $array;
     }
     /**
-     * toast response
+     * Alert response
      */
-    public function toastResponse($options = [])
+    public function alertifyResponse($options = [])
     {
         $options = array_merge(['statusCode' => 200, 'theme' => false, 'message' => false], $options);
         Yii::$app->response->statusCode = $options['statusCode'];
         $array = [
-            'toastPayload' => [
-                'toastMessage'  => $options['message'] ? $options['message'] : 'Hello toast',
-                'toastTheme'    => $options['theme'] ? $options['theme'] : 'info',
+            'alertifyPayload' => [
+                'message'  => $options['message'] ? $options['message'] : 'Hello alert',
+                'theme'    => $options['theme'] ? $options['theme'] : 'info',
+                'type'    => $options['type'] ? $options['type'] : 'alert',
             ]
         ];
         return $array;

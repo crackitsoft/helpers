@@ -2,7 +2,7 @@
 
 namespace crackitsoft\helpers;
 
-use helpers\traits\Keygen;
+use crackitsoft\helpers\traits\Keygen;
 
 
 class Migration extends \yii\db\Migration
